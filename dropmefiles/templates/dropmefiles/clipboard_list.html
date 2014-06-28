@@ -1,0 +1,14 @@
+{% extends "dropmefiles/base.html" %}
+
+{% block content %}
+<table class="cblist">
+    <tr><td>Filename</td><td>Status</td><td>Last Modified</td></tr>
+    {% for item in list %}
+    <tr>
+      <td><a href="{% url 'show_clipboard' item.owner.username item.name %}">{{item.description}}</a></td>
+      <td>{{item.get_state_display}}</td>
+      <td>{{item.lastmodified}}</td></tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

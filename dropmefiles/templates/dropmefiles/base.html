@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/dropmefiles/style.css" />
+    <link rel="stylesheet" href="/static/dropmefiles/pygments.css" />
+    <title>{% block title %}Dropme{% endblock %}</title>
+</head>
+
+<body>
+    {% block body %}
+    <div id="sidebar">
+        {% block sidebar %}
+        {% load templatehelpers %}
+        <ul>
+            <li><a {% url_active 'home' %}>Home</a></li>
+            <li><a {% url_active 'list_clipboards' %}>List</a></li>
+        </ul>
+        {% endblock %}
+        <br>
+        {% if loginUser %}
+        <ul>
+            <li><a {% url_active 'show_user' loginUser.username %}><b>{{loginUser.fullname}}</b></a></li>
+            <li><a href="/logout/">Logout</a></li>
+        </ul>
+        <br>
+        <ul>
+            {% for fav in favs %}
+            <li><a {% url_active 'show_clipboard' fav.clipboard.owner.username fav.clipboard.name %}>{{fav.clipboard.name}}</a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <ul>
+            <li><a href="/login/">Login</a></li>
+        </ul>
+        {% endif %}
+        
+    </div>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% extends "dropmefiles/base.html" %}
+
+
+{% block content %}
+<h1>
+    {% if clipboard.owner != None %}
+        <a href="{% url "show_user" clipboard.owner_id %}">{{ clipboard.owner.fullname }}</a> &#187;
+    {% endif %}
+    {{ clipboard.description }}</h1>
+
+<ul class="events">
+{% for item in items %}
+<li>
+<a href="{{ item.view_url }}" class="imgbox">
+{% if item.filetype == "photo" %}
+<div class="image" style="background-image:url({{ item.preview_url }});"></div>
+{% else %}
+<div class="image" style="background-size:auto;background-image:url(http://home.max-weller.de/docs/img/win-icons/imageres_158-48.png);"></div>
+{% endif %}
+</a>
+<span>{{ item.filename }}</span>
+</li>    
+{% endfor %}
+</ul>
+
+{% endblock %}
+

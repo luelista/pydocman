@@ -1,0 +1,15 @@
+{% extends "dropmefiles/base.html" %}
+
+{% block content %}
+<form action="/login/" method="post">
+    {% csrf_token %}
+
+    Username: <input type="text" name="username"><br>
+    Password: <input type="password" name="password"><br>
+    
+    <input type="submit">
+    
+    
+</form>
+
+{% endblock %}

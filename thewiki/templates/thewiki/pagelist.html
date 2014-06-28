@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf8">
+    <link rel="stylesheet" href="/static/thewiki/style.css" />
+    <title>{{ wiki.sitetitle }}</title>
+</head>
+
+<body>
+    <h1>{{ wiki.sitetitle }}</h1>
+    
+    <div id="content">
+        <table>
+        {% for page in pages %}
+            <tr>
+                <td>{{ page.title }}</td>
+                <td><a href="{{ page.filespec }}">{{ page.filespec }}</a></td>
+                <td>{{ page.lastmodified }}</td>
+                <td>{{ page.lastmodified_by }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

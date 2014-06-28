@@ -1,0 +1,26 @@
+
+html,body { margin: 0; padding: 0; }
+body { font: 10pt Arial; }
+#sidebar { float: left; width: 190px; background: linear-gradient(to bottom, #ddd 0%, #ffffff 100%); padding: 10px; _min-height: 400px; }
+#content { margin-left: 210px; padding: 10px; }
+#sidebar ul { margin: 0; padding: 0; list-style-type: none; }
+#sidebar ul li { margin: 0; padding: 0; border-bottom: 1px solid #ccc; }
+#sidebar ul li a { text-decoration: none; padding: 6px 18px; display: block; color: #666; font-size: 9pt; text-transform: uppercase; }
+#sidebar ul li a:hover { background-color: #eee; color: #333; }
+#sidebar ul li a.active { background-color: #1451DF; color: #fff; }
+
+
+ul.events { list-style-type: none; margin: 0; padding: 0; }
+ul.events li { float: left; width: 205px; height: 200px; }
+ul.events img { max-width: 200px; max-height: 180px; }
+ul.events .imgbox { background-color: #555; width: 190px; height: 160px; padding: 5px; display: block; }
+ul.events .image { height: 160px; background-size: contain; background-repeat: no-repeat; background-position: center; }
+ul.events span { display: block; color: #777; text-overflow: ellipsis;
+	       width: 200px;
+	       white-space: nowrap;
+	       overflow: hidden;}
+
+.cblist { border-collapse: collapse; }
+.cblist td { padding: 4px 18px; }
+.cblist tr:nth-child(odd) { background: #ddd; }
+

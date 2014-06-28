@@ -1,0 +1,30 @@
+{% extends "dropmefiles/base.html" %}
+
+
+
+{% block content %}
+<h1>Hello, World</h1>
+
+<ul class="events">
+{% for event in events %}{% with item=event.get_item %}
+<li>
+
+
+{% if event.type == "ITEM" and item != None  %}
+<a href="{{ item.view_url }}" class="imgbox">
+{% if event.get_data.filetype == "photo" %}
+<div class="image" style="background-image:url({{ item.raw_url }});"></div>
+
+{% endif %}
+</a>
+
+<span> - {{ event.get_data.filename }}</span>
+{% endif %}
+
+<small style="color:#888;font-size:6pt;">&lt;&lt;{{ event.type }}.{{event.subtype }}.<a href="{% url 'show_clipboard' event.clipboard.owner_id event.clipboard.name %}">{{event.clipboard.name}}</a>>></small>
+</li>    
+{% endwith %}{% endfor %}
+</ul>
+
+{% endblock %}
+
