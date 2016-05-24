@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block pre_content %}
+    <h2 class="ui header">
+      <i class="settings icon"></i>
+      <div class="content">
+        Account Settings
+        <div class="sub header">Manage your preferences</div>
+      </div>
+    </h2>
+    <div class="ui menu secondary pointing">
+        {% if user.is_authenticated %}
+        <a class="item {% if request.resolver_match.url_name == "account_email" %}active{% endif %}"
+           href="{% url 'account_email' %}">Change E-mail</a>
+        <a class="item {% if request.resolver_match.url_name == "account_change_password" %}active{% endif %}"
+           href="{% url 'account_change_password' %}">Change Password</a>
+        <a class="item {% if request.resolver_match.url_name == "socialaccount_connections" %}active{% endif %}"
+           href="{% url 'socialaccount_connections' %}">Connect Social Accounts</a>
+        {% endif %}
+
+    </div>
+{% endblock %}

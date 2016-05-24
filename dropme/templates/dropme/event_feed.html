@@ -1,0 +1,9 @@
+{% load activity_tags %}
+
+<div class="ui feed">
+    {% for e in events %}
+        <div class="event">
+        {% display_action e %}
+        </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="ui grid">
+    <div class="ten wide column">
+        {%  include "dropme/event_feed.html" %}
+    </div>
+    <div class="six wide column">
+        <div class="ui vertical fluid menu">
+            {% for cb in followed_clipboards %}
+            <a href="" class="item">{{ cb.name }}</a>
+            {% endfor %}
+
+        </div>
+    </div>
+    </div>
+
+
+{% endblock %}
