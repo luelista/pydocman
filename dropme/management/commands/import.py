@@ -7,6 +7,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--host', type=str, dest='sql_host')
+        parser.add_argument('--port', type=int, dest='sql_port', default=3306)
         parser.add_argument('--user', type=str, dest='user')
         parser.add_argument('--password', type=str, dest='passwd')
         parser.add_argument('--db', type=str, dest='sql_db')
@@ -17,7 +18,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.acting_user_id = options['user_id']
 
-        dbconn = MySQLdb.connect(host=options['sql_host'], user=options['user'], passwd=options['passwd'])
+        dbconn = MySQLdb.connect(host=options['sql_host'], port=options['sql_port'],
+                                 user=options['user'], passwd=options['passwd'])
         dbconn.cursor().execute('USE `'+options['sql_db']+'`;')
         print('Connected to db ',dbconn)
         if options['from_docman']:
