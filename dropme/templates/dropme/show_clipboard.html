@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h2>{{ cb.title  }}</h2>
+
+    <div class="ui items">
+
+            {% for doc in docs %}
+            <div class="item">
+                <div class="content">
+                    <a href="{{ doc.get_show_document_url }}" class="header">{{ doc.title }}</a>
+                </div>
+
+            </div>
+            {% endfor %}
+
+    </div>
+
+
+{% endblock %}

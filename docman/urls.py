@@ -35,8 +35,8 @@ urlpatterns = [
         name="file_preview"),
 
     url(r'^documents/raw/(?P<doc_id>[\w.-]+)/$', dropme_views.file_raw, name="file_raw"),
-    url(r'(?P<token>[\w-]{9})/(?P<slug>[\w-]+)/', dropme_views.show_clipboard, name="show_clipboard"),
-    url(r'(?P<token>[\w-]{9})/(?P<slug>[\w-]+)/(?P<url_filename>[\w-]+)', dropme_views.show_document, name="show_document"),
-    url(r'(?P<readonly_token>[\w-]{12})', dropme_views.show_document, name="show_document"),
+    url(r'(?P<token>[\w-]{9})/(?P<slug>[\w-]+)/$', dropme_views.show_clipboard, name="show_clipboard"),
+    url(r'(?P<token>[\w-]{9})/(?P<slug>[\w-]+)/(?P<url_filename>[\w-]+)$', dropme_views.show_document, name="show_document"),
+    url(r'(?P<readonly_token>[\w-]{12})$', dropme_views.show_document, name="show_document_sharer"),
 
 ]

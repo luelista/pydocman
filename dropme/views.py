@@ -16,7 +16,7 @@ def myprofile(request):
     events = request.user.actor_actions.all()
     return render(request, "dropme/userprofile.html", {
         "user": request.user,
-        "clipboards": request.user.clipboard_set,
+        "clipboards": request.user.clipboard_set.all(),
         "events": events
     })
 
@@ -78,14 +78,15 @@ def show_clipboard(request, token, slug=None):
     cb = Clipboard.objects.get(token=token)
     if not cb.has_view_permission(request.user):
         raise PermissionDenied
-    return render(request, 'dropme/show_clipboard.html', { 'cb': cb })
+    items = cb.document_set.all().order_by('-created_at')
+    return render(request, 'dropme/show_clipboard.html', { 'cb': cb, 'docs': items })
 
 
-def show_document(request, token, slug=None):
+def show_document(request, token, slug, url_filename):
     return render(request, 'dropme/show_document.html', {  })
 
 
-def file_preview(request, token, slug=None):
+def file_preview(request, doc_id, size, page=1):
     return render(request, 'dropme/show_document.html', {  })
 
 

@@ -105,6 +105,8 @@ class Clipboard(models.Model):
     def get_url_args(self):
         return { 'slug': self.get_slug(), 'token': self.token } #, 'cbid': self.id
 
+    def get_show_clipboard_url(self):
+        return reverse('show_clipboard', kwargs=self.get_url_args())
 
 
 def random_token_doc():
@@ -116,7 +118,7 @@ class Document(models.Model):
         pass
         # db_table = "twiki_clipitem"
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True)
     clipboard = models.ForeignKey("Clipboard", db_column="cbid")  # doc_mandant
 
     title = models.CharField(max_length=80)  # title
@@ -132,13 +134,15 @@ class Document(models.Model):
     filesize = models.IntegerField()   # file_size
     page_count = models.IntegerField()  #page_count
         # relevant for PDF documents (and similar stuff)
+    storage_path = models.CharField(max_length=100)
+    storage_filename = models.CharField(max_length=100)
 
     tags = models.ManyToManyField("Tag", through='DocumentTag')  # tags
     comment = models.TextField() # description
 
     # ??? properties = models.IntegerField()
     source_url = models.TextField()
-    source_title = models.TextField()       # import_source
+    source_name = models.TextField()       # import_source
     uploader_ip = models.CharField(max_length=50)
     # ??? upload_via = models.IntegerField()
 
@@ -151,6 +155,12 @@ class Document(models.Model):
 
     readonly_token = models.CharField(max_length=12, default=random_token_doc, unique=True)
 
+    def set_tags(self, tag_str):
+        self.documenttag_set.all().delete()
+        for match in re.finditer(r"([^\s=]+)(?::([^\s]+))?", tag_str):
+            tag_obj, created = Tag.objects.get_or_create(keyword=match.group(1))
+            self.documenttag_set.create(tag=tag_obj, value=match.group(2))
+
     def full_dir(self):
         return settings.DROPME_STORE_DIRECTORY + self.created_at.strftime("%Y-%m-%d") + "_" + str(self.cid) + "/"
 
@@ -159,7 +169,13 @@ class Document(models.Model):
             return myfile.read()
 
     def get_url_args(self):
-        return self.clipboard.get_url_args() + { 'url_filename': self.url_filename, 'doc_id': self.id }
+        z = self.clipboard.get_url_args()
+        z['url_filename'] = self.url_filename
+        #z['doc_id'] = self.id
+        return z
+
+    def get_show_document_url(self):
+        return reverse('show_document', kwargs=self.get_url_args())
 
     def __str__(self):
         return self.title
@@ -167,7 +183,7 @@ class Document(models.Model):
 class DocumentTag(models.Model):
     tag = models.ForeignKey("Tag")
     document = models.ForeignKey("Document")
-    value = models.CharField(max_length=50)
+    value = models.CharField(max_length=50, blank=True, null=True)
 
 class Tag(models.Model):
     keyword = models.CharField(max_length=50)
