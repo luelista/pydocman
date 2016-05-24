@@ -144,8 +144,10 @@ AUTHENTICATION_BACKENDS = (
 
 )
 
-
-# site specific
 SITE_ID = 1
 
-DROPME_STORE_DIRECTORY = '/somewhere'
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

@@ -1,0 +1,8 @@
+
+# template for site specific config
+
+# save this as "local_settings.py"
+
+DROPME_STORE_DIRECTORY = '/path/to/data/directory'
+
+
