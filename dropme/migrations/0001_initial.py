@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
             name='Clipboard',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('token', models.CharField(default=dropme.helper.random_token, max_length=12, unique=True)),
+                ('token', models.CharField(default=dropme.models.random_token_clipboard, max_length=12, unique=True)),
                 ('title', models.CharField(blank=True, max_length=50)),
                 ('viewmode', models.CharField(default='tile', max_length=10)),
                 ('sortorder', models.CharField(default='upload', max_length=10)),
