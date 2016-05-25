@@ -127,7 +127,7 @@ class Document(models.Model):
     # ??? private_flags = models.IntegerField()
     # wird vmtl nicht benötigt??? sort_index = models.IntegerField()
 
-    doc_date = models.DateField(default=datetime.today)
+    doc_date = models.DateField(default=datetime.today, blank=True, null=True)
 
     filetype = models.CharField(max_length=20)
     subtype = models.CharField(max_length=20)
