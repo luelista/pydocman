@@ -1,5 +1,5 @@
+from datetime import datetime
 import re
-
 from django.conf import settings
 from django.contrib.admin.decorators import register
 from django.core.urlresolvers import reverse
@@ -127,7 +127,7 @@ class Document(models.Model):
     # ??? private_flags = models.IntegerField()
     # wird vmtl nicht benötigt??? sort_index = models.IntegerField()
 
-    doc_date = models.DateField(auto_now_add=True)
+    doc_date = models.DateField(default=datetime.today)
 
     filetype = models.CharField(max_length=20)
     subtype = models.CharField(max_length=20)
@@ -149,7 +149,7 @@ class Document(models.Model):
     created_by = models.ForeignKey("auth.User", related_name="documents_created_by")
     updated_by = models.ForeignKey("auth.User", related_name="documents_updated_by")
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=datetime.now)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
