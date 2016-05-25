@@ -76,5 +76,11 @@ class Command(BaseCommand):
             doc.deleted_at = row[12]  # deleted_at
             doc.save()
 
+            Document.objects.filter(pk=doc.pk).update(
+                created_at=row[10],  # created_at
+                updated_at=row[11],  # updated_at
+                deleted_at=row[12]  # deleted_at
+            )
+
     def import_from_dropme(self, dbconn):
         raise NotImplementedError
