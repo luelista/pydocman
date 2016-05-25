@@ -57,9 +57,6 @@ class Command(BaseCommand):
             doc.comment = row[6] #description
             doc.page_count = row[8] #page_count
             doc.filesize = row[9] #file_size
-            doc.created_at = row[10] #created_at
-            doc.updated_at = row[11] #updated_at
-            doc.deleted_at = row[12] #deleted_at
 
             doc.url_filename = row[13]  # id
 
@@ -72,6 +69,12 @@ class Command(BaseCommand):
             doc.save()
             doc.set_tags(row[7]) #tags
 
+            # need to change the timestamps after first save...
+            # https://code.djangoproject.com/ticket/16583
+            doc.created_at = row[10]  # created_at
+            doc.updated_at = row[11]  # updated_at
+            doc.deleted_at = row[12]  # deleted_at
+            doc.save()
 
     def import_from_dropme(self, dbconn):
         raise NotImplementedError
