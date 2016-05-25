@@ -20,6 +20,12 @@
             {% endfor %}
 
         </div>
+
+
+        {% if request.user == user %}
+        <p><a href="{% url 'create_clipboard' %}" class="ui green button"><i class="plus icon"></i> Create clipboard</a></p>
+        {% endif %}
+
     </div>
     </div>
 
