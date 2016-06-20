@@ -2,9 +2,12 @@
 <html>
   <head>
     <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>{% block head_title %}{% endblock %}</title>
     {% load staticfiles %}
     <link rel="stylesheet" href="{% static 'dropme/semantic/semantic.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'dropme/style.css' %}"/>
 
     {% block extra_head %}
     {% endblock %}
@@ -17,6 +20,15 @@
 
             {% if user.is_authenticated %}
             <a class="item" href="{% url 'dashboard' %}">Dashboard</a>
+            <form action="" method="get" class="ui category search item" style="display:inline">
+    <div class="ui transparent icon input">
+            <input type="text" placeholder="Suche" name="q" value="" class="input" size=30>
+      <i class="search link icon"></i>
+    </div>
+            </form>
+
+            <a href="http://docman.max-weller.de/imports" class="item">Import</a>
+
             {% else %}
             <a class="item" href="{% url 'homepage' %}">Home</a>
             {% endif %}

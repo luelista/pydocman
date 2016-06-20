@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h2>{{ cb.name  }}</h2>
+    <h2>{{ doc.title  }}</h2>
+
+<p><img src="{% url 'preview_image' doc.id 'page' 1 %}"></p>
+
+
+
+
+{% endblock %}

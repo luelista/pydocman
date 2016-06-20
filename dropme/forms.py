@@ -16,6 +16,10 @@ class CreateClipboardForm(forms.Form):
         self.fields['owner_group'].queryset = Group.objects.filter(user=session_user).order_by('name')
 
 
+class UploadDocumentForm(forms.Form):
+    title = forms.CharField(max_length=50)
+    doc_date = forms.DateField()
+    file = forms.FileField()
 
 
 

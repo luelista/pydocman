@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
 
     'dropme',
+    'rest_framework',
 
     'allauth',
     'allauth.account',
@@ -143,6 +144,13 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 
 )
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'PAGE_SIZE': 10
+}
+
 
 SITE_ID = 1
 

@@ -1,10 +1,22 @@
 from datetime import datetime
+
+from subprocess import check_output, check_call
+
+import os
+from dropme.docinfos import ImageDocInfo, DocInfo, PdfDocInfo
+from os import stat
+
 import re
+from actstream import action
 from django.conf import settings
 from django.contrib.admin.decorators import register
+from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse
 from django.db import models
 import uuid
+
+from django.db.models.signals import post_save
+from django.dispatch.dispatcher import receiver
 from django.utils.text import slugify
 
 from dropme.helper import random_token
@@ -58,7 +70,7 @@ class Clipboard(models.Model):
 
 
     def get_permission_for(self, user):
-        if user is None: return None
+        if user is None or isinstance(user, AnonymousUser): return None
         try:
             userPerm = UserPermission.objects.get(clipboard=self, for_user=user)
             return userPerm
@@ -107,11 +119,12 @@ class Clipboard(models.Model):
 
     def get_show_clipboard_url(self):
         return reverse('show_clipboard', kwargs=self.get_url_args())
+    def get_absolute_url(self):
+        return self.get_show_clipboard_url()
 
 
 def random_token_doc():
     return random_token(12)
-
 
 class Document(models.Model):
     class Meta:
@@ -161,21 +174,51 @@ class Document(models.Model):
             tag_obj, created = Tag.objects.get_or_create(keyword=match.group(1))
             self.documenttag_set.create(tag=tag_obj, value=match.group(2))
 
-    def full_dir(self):
-        return settings.DROPME_STORE_DIRECTORY + self.created_at.strftime("%Y-%m-%d") + "_" + str(self.cid) + "/"
+    def get_path(self):
+        if not self.storage_path:
+            raise RuntimeError("storage_path was not set - model must be saved before using full_dir")
+        return settings.DROPME_STORE_DIRECTORY + "/" + self.storage_path + "/"
+
+    def default_dir_name(self):
+        return self.created_at.strftime("%Y-%m-%d") + "_" + str(self.cid)
+
+    def get_main_filespec(self):
+        return self.get_path() + self.storage_filename
+
+    def get_page_preview_filespec(self, page_number):
+        return self.get_path() + '_page' + str(page_number) + '.jpg'
+
+    def get_thumb_filespec(self, page_number = 1):
+        return self.get_path() + '_thumb' + str(page_number) + '.jpg'
+
+    def handle_uploaded_file(self, f):
+        with open(self.get_main_filespec(), 'wb+') as destination:
+            for chunk in f.chunks():
+                destination.write(chunk)
+
+        # generate preview images
+        self.docinfo().prepare_preview()
 
     def read_file_contents(self):
-        with open(self.full_path(), "r") as myfile:
+        with open(self.get_main_filespec(), "r") as myfile:
             return myfile.read()
 
     def get_url_args(self):
-        z = self.clipboard.get_url_args()
-        z['url_filename'] = self.url_filename
+        #z = self.clipboard.get_url_args()
+        #z['url_filename'] = self.url_filename
         #z['doc_id'] = self.id
-        return z
+        return { 'doc_id': self.id }
 
     def get_show_document_url(self):
         return reverse('show_document', kwargs=self.get_url_args())
+
+    def docinfo(self):
+        if self.filetype == 'image':
+            return ImageDocInfo(self)
+        elif self.filetype == 'pdf':
+            return PdfDocInfo(self)
+        else:
+            return DocInfo(self)
 
     def __str__(self):
         return self.title
@@ -187,5 +230,4 @@ class DocumentTag(models.Model):
 
 class Tag(models.Model):
     keyword = models.CharField(max_length=50)
-
 
